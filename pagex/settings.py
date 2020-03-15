@@ -159,9 +159,12 @@ PASSWORD_RESET_COMPLETE_TEMPLATE_NAME = 'author/auth/password_reset_done.html'  
 
 # rest auth settings
 REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_SERIALIZER': 'author.auth.serializers.PasswordResetSerializer'
-}
+    'PASSWORD_RESET_SERIALIZER': 'author.auth.serializers.PasswordResetSerializer',
 
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'author.auth.serializers.RegisterSerializer',
+}
 # django-all-auth
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
