@@ -9,5 +9,8 @@ class BlogPost(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='blog_posts')
 
+    class Meta:
+        ordering = ('-created_date',)
+
     def __str__(self):
         return self.title
