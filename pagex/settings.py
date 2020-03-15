@@ -36,6 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
     # third-party apps
     'rest_framework',
     'rest_framework.authtoken',
@@ -45,6 +49,8 @@ INSTALLED_APPS = [
     'blog',
     'author',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -121,3 +127,35 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+
+# Email
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = 'PageX <no-reply@pagex.com>'
+PASSWORD_RESET_FROM_EMAIL = DEFAULT_FROM_EMAIL
+
+# auth templates
+PASSWORD_RESET_CONFIRM_TEMPLATE_NAME = 'author/auth/password_reset_confirm.html'  # if we want to change the layout
+PASSWORD_RESET_COMPLETE_TEMPLATE_NAME = 'author/auth/password_reset_done.html'  # if we want to change the layout
+
+# rest auth settings
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'author.auth.serializers.PasswordResetSerializer'
+}
+
+# django-all-auth
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
