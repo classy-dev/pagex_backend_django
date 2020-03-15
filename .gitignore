@@ -144,3 +144,6 @@ static
 
 # Pycharm
 .idea/
+
+# user images
+user_*/*
