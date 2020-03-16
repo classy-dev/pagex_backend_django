@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from utils.views import APIViewMixin
@@ -9,7 +10,7 @@ from .models import Passion
 User = get_user_model()
 
 
-class UserAPI(APIView, APIViewMixin):
+class LoggedInUserAPI(APIView, APIViewMixin):
     serializer_class = UserDetailSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -22,6 +23,13 @@ class UserAPI(APIView, APIViewMixin):
         serializer.is_valid(True)
         serializer.save()
         return Response(serializer.data)
+
+
+class UserAPI(generics.RetrieveAPIView):
+    queryset = User.objects.filter(is_active=True)
+    serializer_class = UserDetailSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_url_kwarg = 'user_id'
 
 
 class PassionListView(APIView):
