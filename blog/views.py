@@ -20,5 +20,5 @@ class MyBlogPostViewSet(viewsets.ModelViewSet):
 
 
 class BlogPostFeedAPI(generics.ListAPIView):
-    queryset = BlogPost.objects.all()
+    queryset = BlogPost.objects.filter(author__isnull=False)
     serializer_class = BlogPostListSerializer
