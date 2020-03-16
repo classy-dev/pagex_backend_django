@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from utils.views import APIViewMixin
 from .serializers import UserDetailSerializer
+from .models import Passion
 
 User = get_user_model()
 
@@ -21,3 +22,12 @@ class UserAPI(APIView, APIViewMixin):
         serializer.is_valid(True)
         serializer.save()
         return Response(serializer.data)
+
+
+class PassionListView(APIView):
+    queryset = Passion.objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        passion_list = self.queryset.values_list('name', flat=True)
+        return Response({'passion': passion_list})

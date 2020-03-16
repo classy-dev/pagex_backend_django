@@ -5,4 +5,5 @@ pillow==7.0.0
 djangorestframework==3.11.0
 django-rest-auth==0.9.5
 django-allauth==0.41.0
+django-environ==0.4.5
 flake8
