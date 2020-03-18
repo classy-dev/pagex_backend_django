@@ -4,6 +4,7 @@ from blog import views
 
 drf_router = routers.DefaultRouter()
 drf_router.register('my-post', views.MyBlogPostViewSet, basename='my-blog-post')
+drf_router.register(r'feed/(?P<post_id>[0-9]+)/react', views.ReactCRUDAPI, basename='post-react')
 
 urlpatterns = [
                   path('feed/', views.BlogPostFeedAPI.as_view(), name='blog-feed'),
