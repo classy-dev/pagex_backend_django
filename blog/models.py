@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 
 
-# Create your models here.
 class BlogPost(models.Model):
     title = models.CharField(max_length=250)
     content = models.TextField()
@@ -14,3 +13,29 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Promote(models.Model):
+    title = models.CharField(max_length=250)
+    post = models.ForeignKey('BlogPost', on_delete=models.CASCADE, related_name='promotes')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='promotes')
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ('-created_date',)
+
+    def __str__(self):
+        return self.title
+
+
+class React(models.Model):
+    content = models.TextField()
+    post = models.ForeignKey('BlogPost', on_delete=models.CASCADE, related_name='reacts')
+    created_date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reacts')
+
+    class Meta:
+        ordering = ('-created_date',)
+
+    def __str__(self):
+        return f'{self.post.title} - {self.content[:20]}'
