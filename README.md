@@ -1,8 +1,8 @@
 # PageX-Django
 
 ## Prerequisites
-1. Python 3.x (recommended Python 3.6)
-2. MongoDB 3.6 (or higher)
+1. [Python 3.x](https://www.python.org/) (recommended Python 3.6)
+2. [MongoDB 3.6](https://www.mongodb.com/) (or higher)
 
 ## How to?
 1. clone the project
