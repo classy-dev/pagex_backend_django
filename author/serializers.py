@@ -11,7 +11,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'passion', 'image')
+        fields = ('id', 'first_name', 'last_name', 'email', 'passion', 'image')
         read_only_fields = ('email',)
 
     def _get_passion(self, name):
@@ -26,3 +26,26 @@ class UserDetailSerializer(serializers.ModelSerializer):
         instance.profile.passion = self._get_passion(profile.get('passion', {}).get('name'))
         instance.profile.save()
         return super().update(instance, validated_data)
+
+
+class FollowSerializer(serializers.Serializer):
+    followee = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(is_active=True))
+    follow_type = serializers.ChoiceField(choices=['follow', 'unfollow'])
+
+    class Meta:
+        fields = ('followee',)
+
+    def validate_followee(self, followee):
+        if followee == self.context['request'].user:
+            raise serializers.ValidationError('"followee" must not be logged-in user')
+        return followee
+
+    def follow(self):
+        logged_in_user = self.context['request'].user
+        logged_in_user.profile.following.add(self.validated_data['followee'].profile)
+        return True
+
+    def unfollow(self):
+        logged_in_user = self.context['request'].user
+        logged_in_user.profile.following.remove(self.validated_data['followee'].profile)
+        return True

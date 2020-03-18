@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from utils.views import APIViewMixin
-from .serializers import UserDetailSerializer
+from .serializers import UserDetailSerializer, FollowSerializer
 from .models import Passion
 
 User = get_user_model()
@@ -39,3 +39,14 @@ class PassionListView(APIView):
     def get(self, request, *args, **kwargs):
         passion_list = self.queryset.values_list('name', flat=True)
         return Response({'passion': passion_list})
+
+
+class FollowAPI(APIView, APIViewMixin):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = FollowSerializer
+
+    def post(self, request, user_id, follow_type, *args, **kwargs):
+        serializer = self.serializer_class(data={'followee': user_id, 'follow_type': follow_type}, context=self.get_serializer_context())
+        serializer.is_valid(True)
+        getattr(serializer, follow_type)()
+        return Response({'detail': f'Successfully {follow_type}ed'})
