@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import BlogPost, React, Promote
-from .serializers import BlogPostListSerializer, ReactCreateSerializer, ReactListSerializer
+from .serializers import BlogPostListSerializer, ReactCreateSerializer, ReactListSerializer, PromoteEditSerializer, PromoteSerializer
 
 
 class MyBlogPostViewSet(viewsets.ModelViewSet):
@@ -37,6 +37,23 @@ class ReactCRUDAPI(viewsets.ModelViewSet):
         if self.action in ['create', 'partial_update']:
             return ReactCreateSerializer
         return ReactListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user, post_id=self.kwargs['post_id'])
+
+
+class PromoteCRUDAPI(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'partial_update']:
+            return PromoteEditSerializer
+        return PromoteSerializer
+
+    def get_queryset(self):
+        if self.request.method.lower() == 'get':
+            return Promote.objects.filter(post=self.kwargs['post_id'])
+        return Promote.objects.filter(post=self.kwargs['post_id'], author=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, post_id=self.kwargs['post_id'])

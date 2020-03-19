@@ -33,3 +33,17 @@ class BlogPostListSerializer(serializers.ModelSerializer):
         model = BlogPost
         fields = ('id', 'title', 'content', 'author', 'reacts')
         read_only_fields = ('id',)
+
+
+class PromoteEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Promote
+        fields = ('id', 'title',)
+
+
+class PromoteSerializer(serializers.ModelSerializer):
+    author = AuthorShortSerializer()
+
+    class Meta:
+        model = Promote
+        fields = ('id', 'title', 'post', 'author', 'created_date')

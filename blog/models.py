@@ -16,7 +16,7 @@ class BlogPost(models.Model):
 
 
 class Promote(models.Model):
-    title = models.CharField(max_length=250)
+    title = models.CharField(max_length=250, blank=True)
     post = models.ForeignKey('BlogPost', on_delete=models.CASCADE, related_name='promotes')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='promotes')
     created_date = models.DateTimeField(auto_now_add=True)
