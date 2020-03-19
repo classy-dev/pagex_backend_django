@@ -1,8 +1,9 @@
 from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from .models import BlogPost, React, Promote
-from .serializers import BlogPostListSerializer, ReactCreateSerializer, ReactListSerializer, PromoteEditSerializer, PromoteSerializer
+from .models import BlogPost, React, Promote, Tag
+from .serializers import (BlogPostListSerializer, ReactCreateSerializer, ReactListSerializer, PromoteEditSerializer, PromoteSerializer,
+                          TagSerializer)
 
 
 class MyBlogPostViewSet(viewsets.ModelViewSet):
@@ -57,3 +58,9 @@ class PromoteCRUDAPI(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user, post_id=self.kwargs['post_id'])
+
+
+class TagAPI(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()

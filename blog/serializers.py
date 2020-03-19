@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import BlogPost, React, Promote
+from .models import BlogPost, React, Promote, Tag
 
 User = get_user_model()
 
@@ -47,3 +47,9 @@ class PromoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promote
         fields = ('id', 'title', 'post', 'author', 'created_date')
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('id', 'name')

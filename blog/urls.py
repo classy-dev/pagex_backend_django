@@ -9,4 +9,5 @@ drf_router.register(r'feed/(?P<post_id>[0-9]+)/promote', views.PromoteCRUDAPI, b
 
 urlpatterns = [
                   path('feed/', views.BlogPostFeedAPI.as_view(), name='blog-feed'),
+                  path('tag/', views.TagAPI.as_view(), name='tags'),
               ] + drf_router.urls
