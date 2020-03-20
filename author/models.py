@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from django.conf import settings
 
@@ -31,3 +32,19 @@ class Profile(models.Model):
     @property
     def following_count(self):
         return self.following.count()
+
+
+def generate_verification_code():
+    return str(random.randint(1000000000, 9999999999))
+
+
+class Verification(models.Model):
+    email = models.EmailField()
+    code = models.CharField(max_length=10, blank=True)
+
+    def generate_code(self):
+        from author.auth.tasks import send_email_verification
+        self.code = generate_verification_code()
+        self.save()
+        send_email_verification(self)
+        return self.code
